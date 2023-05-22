@@ -1,0 +1,36 @@
+name: webhook
+
+# Controls when the workflow will run
+on:
+  repository_dispatch:
+    types: [button]
+
+env: 
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+  TF_VAR_PAT: ${{ secrets.PAT }}
+  TF_VAR_REPO_GH_TOKEN: ${{ secrets.PAT }}
+
+
+jobs:
+
+  setup_infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: git
+        continue-on-error: true
+        run: |
+         git config --global user.name "John Doe"
+         git config --global user.email johndoe@example.com
+        # echo ${{ github.event.client_payload.encoded }} | base64 -d | jq '.[] ' > /tmp/config.txt
+         echo ${{ github.event.client_payload.encoded }} 
+
+   
