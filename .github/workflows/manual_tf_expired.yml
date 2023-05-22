@@ -1,4 +1,4 @@
-name: Terraform expired
+name: Periodic Expired Resources Scanning
 
 on:
   workflow_dispatch:
