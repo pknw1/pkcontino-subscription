@@ -100,8 +100,7 @@ jobs:
         
   apply:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    if: github.event.inputs.action == 'destroy' 
-
+    if: github.event.inputs.action == 'apply' 
     name:  Apply
     steps:
       - name: checkout
