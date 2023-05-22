@@ -77,6 +77,10 @@ resource "azurerm_network_interface" "ubuntu2204python_nic" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.ubuntu2204python_public_ip.id
   }
+
+    timeouts {
+      delete = "10s"
+  }
 }
 
 # Connect the security group to the network interface

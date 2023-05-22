@@ -38,6 +38,10 @@ resource "azurerm_public_ip" "win11_public_ip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
+
+    timeouts {
+      delete = "10s"
+  }
 }
 
 # Create Network Security Group and rule
@@ -85,6 +89,10 @@ resource "azurerm_network_interface" "win11_nic" {
     subnet_id                     = azurerm_subnet.win11_subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.win11_public_ip.id
+  }
+
+    timeouts {
+      delete = "10s"
   }
 }
 
