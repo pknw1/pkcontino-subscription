@@ -29,6 +29,6 @@ jobs:
         run: |
          git config --global user.name "John Doe"
          git config --global user.email johndoe@example.com
-         echo ${{ github.event.client_payload.encoded }} 
+         echo ${{ github.event.client_payload.action }} 
 
    
