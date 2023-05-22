@@ -81,7 +81,7 @@ resource "azurerm_ssh_public_key" "pknw1" {
   name                = "pknw1"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  public_key          = file("~/.ssh/id_rsa.pub")
+  public_key          = file("id_rsa.pub")
 }
 
 # Create (and display) an SSH key
