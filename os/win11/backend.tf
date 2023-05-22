@@ -10,7 +10,11 @@ terraform {
         }
 
 provider "azurerm" {
- features {}
+ features {
+  virtual_machine {
+    skip_shutdown_and_force_delete = true
+  }
+ }
  skip_provider_registration = false
  storage_use_azuread = true
 }

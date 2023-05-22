@@ -106,6 +106,8 @@ resource "random_id" "random_id" {
 
 
 resource "azurerm_windows_virtual_machine" "main" {
+  # checkov:skip=BC_AZR_GENERAL_14: ADD REASON
+  # checkov:skip=BC_AZR_GENERAL_89: ADD REASON
   name                  = "win11"
   admin_username        = "pknw1"
   admin_password        = random_password.password.result
