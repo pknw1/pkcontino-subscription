@@ -1,6 +1,19 @@
+variable "expiry" { default = 1 }
+
+locals {
+  current_time           = timestamp()
+  today                  = formatdate("YYYY-MM-DD", local.current_time)
+    
+  max_start_date         = formatdate("YYYY-MM-DD", timeadd(local.today, "1d"))
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "ubuntu2204python"
   location = "uksouth"
+
+    tags     = { 
+    expires =  local.max_start_date
+    }    
 }
 
 # Create virtual network

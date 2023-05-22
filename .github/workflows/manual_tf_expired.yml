@@ -1,4 +1,4 @@
-name: Terraform Apply
+name: Terraform expired
 
 on:
   workflow_dispatch:
@@ -10,14 +10,6 @@ on:
           - win11
           - ubuntu
           - ubuntu_python
-      expiry:
-        description:
-        type: choice
-        options:
-          - 1
-          - 2
-          - 3
-    
 
 env:
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -33,7 +25,7 @@ env:
 jobs:
   ubuntu:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name:  Apply
+    name:  expired
     steps:
       - name: checkout
         id: checkout
@@ -49,13 +41,12 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          cd os/${{ github.event.inputs.OS }}
+          cd os/${{ github.event.inputs.OS }}/
           terraform init -no-color -input=false 
 
-      - name: Terraform Apply
-        id: Apply
+      - name: Terraform expired
+        id: expired
         run: |
-          cd os/${{ github.event.inputs.OS }}
-          terraform apply -auto-approve -no-color -input=false -var expiry=${{ github.event.inputs.expiry }}
+          az account list
         continue-on-error: false
         
