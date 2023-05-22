@@ -1,0 +1,57 @@
+name: Terraform Plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description:
+        type: choice
+        options:
+          - win11
+          - ubuntu
+
+
+env:
+ ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+ ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+ ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+ ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+ TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+ TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+ TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+ TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name:  Plan
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16        
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd ubuntu
+          terraform init -no-color -input=false 
+
+      - name: Terraform Plan
+        id: Plan
+        run: |
+          cd ubuntu
+          terraform plan -no-color -input=false -out=plan
+        continue-on-error: false
+        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: plan
+          path: ubuntu/plan
