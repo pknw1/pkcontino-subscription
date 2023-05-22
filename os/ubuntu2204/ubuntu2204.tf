@@ -5,7 +5,7 @@ locals {
   current_time           = timestamp()
   today                  = formatdate("YYYY-MM-DD", local.current_time)
   hours                  = var.expiry * 24
-  max_start_date         = formatdate("YYYY-MM-DD", timeadd(timestamp(), "${local.hours}h"))
+  max_start_date         = formatdate("DD/MM/YYYY", timeadd(timestamp(), "${local.hours}h"))
 }
 
 resource "azurerm_resource_group" "rg" {
