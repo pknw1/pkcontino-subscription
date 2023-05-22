@@ -7,7 +7,7 @@ on:
         description:
         type: choice
         options:
-          - ubuntu
+          - ubuntu2204
           - ubuntu_python
 
 env:
