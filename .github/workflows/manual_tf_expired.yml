@@ -46,10 +46,6 @@ jobs:
         run: |
           # Get current timestamp
           timestamp=$(date -u +%d/%m/%Y)
-          # Run Azure CLI command to list resource groups with specific tag value
-          cd os
-          az group list --query "[?tags.expires<=\`${timestamp}\`]".id -o tsv | awk -F/ '{print $NF}'/ | xargs -n1 cd
-          terraform init
-          terraform destroy -auto-approve
+          ./expired.sh
         continue-on-error: false
         
