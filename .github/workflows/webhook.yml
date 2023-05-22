@@ -21,14 +21,14 @@ jobs:
   setup_infra:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: checkour
+        uses: actions/checkout@v3
 
       - name: git
         continue-on-error: true
         run: |
          git config --global user.name "John Doe"
          git config --global user.email johndoe@example.com
-        # echo ${{ github.event.client_payload.encoded }} | base64 -d | jq '.[] ' > /tmp/config.txt
          echo ${{ github.event.client_payload.encoded }} 
 
    
