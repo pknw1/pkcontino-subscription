@@ -7,16 +7,17 @@ on:
         description:
         type: choice
         options:
-          - win11
           - ubuntu
           - ubuntu_python
       expiry:
-        description:
+        description: auto-destroy in days?
         type: choice
         options:
           - 1
           - 2
           - 3
+          - 4 
+          - 5
     
 
 env:

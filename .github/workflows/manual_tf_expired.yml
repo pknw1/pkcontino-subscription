@@ -7,7 +7,6 @@ on:
         description:
         type: choice
         options:
-          - win11
           - ubuntu
           - ubuntu_python
 
@@ -49,6 +48,8 @@ jobs:
       - name: Terraform expired
         id: expired
         run: |
-          az account list
+          os=$(az group list --tag 'expired' --query '[].id' -o tsv | awk -F/ '{print $NF}')
+          cd os/${os}/
+          terraform init
         continue-on-error: false
         

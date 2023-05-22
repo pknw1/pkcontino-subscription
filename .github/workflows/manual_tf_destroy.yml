@@ -7,7 +7,6 @@ on:
         description:
         type: choice
         options:
-          - win11
           - ubuntu
           - ubuntu_python
 
