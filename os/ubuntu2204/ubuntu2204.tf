@@ -42,6 +42,9 @@ resource "azurerm_public_ip" "ubuntu2204_public_ip" {
     timeouts {
       delete = "2h"
   }
+    lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Create Network Security Group and rule

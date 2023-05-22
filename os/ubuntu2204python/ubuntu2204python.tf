@@ -40,7 +40,10 @@ resource "azurerm_public_ip" "ubuntu2204python_public_ip" {
   allocation_method   = "Dynamic"
 
   timeouts {
-      delete = "10s"
+      delete = "2h"
+  }
+    lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -84,7 +87,7 @@ resource "azurerm_network_interface" "ubuntu2204python_nic" {
 
   depends_on = [ azurerm_public_ip.ubuntu2204python_public_ip ]
     timeouts {
-      delete = "10s"
+      delete = "2h"
   }
 }
 

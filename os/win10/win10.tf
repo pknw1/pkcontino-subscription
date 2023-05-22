@@ -40,7 +40,10 @@ resource "azurerm_public_ip" "win10_public_ip" {
   allocation_method   = "Dynamic"
 
     timeouts {
-      delete = "10s"
+      delete = "2h"
+  }
+    lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -92,7 +95,7 @@ resource "azurerm_network_interface" "win10_nic" {
   }
 
     timeouts {
-      delete = "10s"
+      delete = "2h"
   }
 }
 
