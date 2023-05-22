@@ -12,6 +12,6 @@ resource "azurerm_resource_group" "rg" {
   name     = "ubuntu2204"
   location = "uksouth"
   tags     = { 
-    expires =  local.max_start_date
+    expires =  local.max_start_dwate
     }    
 }

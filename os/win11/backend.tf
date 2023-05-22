@@ -5,7 +5,7 @@ terraform {
             resource_group_name  = "tf_state"
             storage_account_name = "continobakerytfstate"
             container_name       = "pkcontino-win11"
-            key                  = "win11.tfstate"
+            key                  = "dev.tfstate"
           }
         }
 
