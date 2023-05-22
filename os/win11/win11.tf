@@ -94,12 +94,17 @@ resource "azurerm_network_interface" "win11_nic" {
     timeouts {
       delete = "10s"
   }
+  depends_on = [azurerm_public_ip.win11_public_ip]
 }
 
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "example" {
   network_interface_id      = azurerm_network_interface.win11_nic.id
   network_security_group_id = azurerm_network_security_group.win11_nsg.id
+
+  depends_on = [ azurerm_network_interface.win11_nic,
+  azurerm_network_security_group.win11_nsg 
+  ]
 }
 
 # Generate random text for a unique storage account name
