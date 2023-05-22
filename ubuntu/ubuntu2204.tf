@@ -128,14 +128,14 @@ resource "azurerm_linux_virtual_machine" "ubuntu_vm" {
 
 
 resource "azurerm_virtual_machine_extension" "configureLinuxRunner" {
-  name                 = "configureLinuxRunner"
-  virtual_machine_id   = azurerm_linux_virtual_machine.linux_runner.id
+  name                 = "scripts"
+  virtual_machine_id   = azurerm_linux_virtual_machine.ubuntu_vm.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
   type_handler_version = "2.1"
 
   depends_on = [ azurerm_linux_virtual_machine.ubuntu_vm ]
-  
+
   settings = <<SETTINGS
  {
   "commandToExecute": "hostname && uptime && touch /pknw1"
