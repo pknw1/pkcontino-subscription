@@ -9,7 +9,7 @@ on:
         options:
           - win11
           - ubuntu
-
+          - ubuntu_python
 
 env:
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}

@@ -1,35 +1,35 @@
 resource "azurerm_resource_group" "rg" {
-  name     = "ubuntu"
+  name     = "ubuntu2204python"
   location = "uksouth"
 }
 
 # Create virtual network
-resource "azurerm_virtual_network" "ubuntu_network" {
-  name                = "ubuntu"
+resource "azurerm_virtual_network" "ubuntu2204python_network" {
+  name                = "ubuntu2204python"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
 
 # Create subnet
-resource "azurerm_subnet" "ubuntu_subnet" {
-  name                 = "ubuntuSubnet"
+resource "azurerm_subnet" "ubuntu2204python_subnet" {
+  name                 = "ubuntu2204pythonSubnet"
   resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.ubuntu_network.name
+  virtual_network_name = azurerm_virtual_network.ubuntu2204python_network.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
 # Create public IPs
-resource "azurerm_public_ip" "ubuntu_public_ip" {
-  name                = "ubuntuPublicIP"
+resource "azurerm_public_ip" "ubuntu2204python_public_ip" {
+  name                = "ubuntu2204pythonPublicIP"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
 }
 
 # Create Network Security Group and rule
-resource "azurerm_network_security_group" "ubuntu_nsg" {
-  name                = "ubuntuNetworkSecurityGroup"
+resource "azurerm_network_security_group" "ubuntu2204python_nsg" {
+  name                = "ubuntu2204pythonNetworkSecurityGroup"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -47,23 +47,23 @@ resource "azurerm_network_security_group" "ubuntu_nsg" {
 }
 
 # Create network interface
-resource "azurerm_network_interface" "ubuntu_nic" {
-  name                = "ubuntuNIC"
+resource "azurerm_network_interface" "ubuntu2204python_nic" {
+  name                = "ubuntu2204pythonNIC"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-    name                          = "ubuntu_nic_configuration"
-    subnet_id                     = azurerm_subnet.ubuntu_subnet.id
+    name                          = "ubuntu2204python_nic_configuration"
+    subnet_id                     = azurerm_subnet.ubuntu2204python_subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.ubuntu_public_ip.id
+    public_ip_address_id          = azurerm_public_ip.ubuntu2204python_public_ip.id
   }
 }
 
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "example" {
-  network_interface_id      = azurerm_network_interface.ubuntu_nic.id
-  network_security_group_id = azurerm_network_security_group.ubuntu_nsg.id
+  network_interface_id      = azurerm_network_interface.ubuntu2204python_nic.id
+  network_security_group_id = azurerm_network_security_group.ubuntu2204python_nsg.id
 }
 
 # Generate random text for a unique storage account name
@@ -91,28 +91,28 @@ resource "tls_private_key" "example_ssh" {
 }
 
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "ubuntu_vm" {
-  name                  = "ubuntuVM"
+resource "azurerm_linux_virtual_machine" "ubuntu2204python_vm" {
+  name                  = "ubuntu2204pythonVM"
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
-  network_interface_ids = [azurerm_network_interface.ubuntu_nic.id]
+  network_interface_ids = [azurerm_network_interface.ubuntu2204python_nic.id]
   size                  = "Standard_DS1_v2"
 
   os_disk {
-    name                 = "ubuntuOsDisk"
+    name                 = "ubuntu2204pythonOsDisk"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
+    offer     = "0001-com-ubuntu2204python-server-jammy"
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
 
-  computer_name                   = "ubuntuvm"
+  computer_name                   = "ubuntu2204pythonvm"
   admin_username                  = "pknw1"
   disable_password_authentication = true
 
@@ -122,19 +122,19 @@ resource "azurerm_linux_virtual_machine" "ubuntu_vm" {
   }
 
   #boot_diagnostics {
-  #  storage_account_uri = azurerm_storage_account.ubuntu_storage_account.primary_blob_endpoint
+  #  storage_account_uri = azurerm_storage_account.ubuntu2204python_storage_account.primary_blob_endpoint
   #}
 }
 
 
 resource "azurerm_virtual_machine_extension" "configureLinuxRunner" {
   name                 = "scripts"
-  virtual_machine_id   = azurerm_linux_virtual_machine.ubuntu_vm.id
+  virtual_machine_id   = azurerm_linux_virtual_machine.ubuntu2204python_vm.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
   type_handler_version = "2.1"
 
-  depends_on = [ azurerm_linux_virtual_machine.ubuntu_vm ]
+  depends_on = [ azurerm_linux_virtual_machine.ubuntu2204python_vm ]
 
   settings = <<SETTINGS
  {
@@ -149,5 +149,5 @@ SETTINGS
 }
 
 output "public_ip_address" {
-  value = azurerm_linux_virtual_machine.ubuntu_vm.public_ip_address
+  value = azurerm_linux_virtual_machine.ubuntu2204python_vm.public_ip_address
 }
