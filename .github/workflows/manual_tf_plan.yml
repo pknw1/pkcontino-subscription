@@ -3,12 +3,13 @@ name: Terraform Plan
 on:
   workflow_dispatch:
     inputs:
-      environment:
+      OS:
         description:
         type: choice
         options:
           - win11
           - ubuntu
+          - ubuntu_python
 
 
 env:
@@ -41,13 +42,13 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          cd ubuntu
+          cd os/${{ github.event.inputs.OS }}/
           terraform init -no-color -input=false 
 
       - name: Terraform Plan
         id: Plan
         run: |
-          cd ubuntu
+          cd os/${{ github.event.inputs.OS }}/
           terraform plan -no-color -input=false -out=plan
         continue-on-error: false
         

@@ -9,6 +9,7 @@ on:
         options:
           - win11
           - ubuntu
+          - ubuntu_python
 
 
 env:
@@ -41,13 +42,13 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          cd ${{ github.event.inputs.OS }}
+          cd os/${{ github.event.inputs.OS }}
           terraform init -no-color -input=false 
 
       - name: Terraform Apply
         id: Apply
         run: |
-          cd ubuntu
+          cd os/${{ github.event.inputs.OS }}
           terraform apply -auto-approve -no-color -input=false
         continue-on-error: false
         

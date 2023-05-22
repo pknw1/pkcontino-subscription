@@ -3,7 +3,7 @@ name: Terraform destroy
 on:
   workflow_dispatch:
     inputs:
-      environment:
+      OS:
         description:
         type: choice
         options:
@@ -41,13 +41,13 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          cd ubuntu
+          cd os/${{ github.event.inputs.OS }}/
           terraform init -no-color -input=false 
 
       - name: Terraform destroy
         id: destroy
         run: |
-          cd ubuntu
+          cd os/${{ github.event.inputs.OS }}/
           terraform destroy -auto-approve -no-color -input=false
         continue-on-error: false
         
