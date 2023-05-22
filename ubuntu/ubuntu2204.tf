@@ -127,6 +127,26 @@ resource "azurerm_linux_virtual_machine" "ubuntu_vm" {
 }
 
 
+resource "azurerm_virtual_machine_extension" "configureLinuxRunner" {
+  name                 = "configureLinuxRunner"
+  virtual_machine_id   = azurerm_linux_virtual_machine.linux_runner.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
+
+  depends_on = [ azurerm_storage_blob.configureLinuxRunner, azurerm_role_assignment.linux_runner_storage,azurerm_storage_account.storage, azurerm_storage_account.support ]
+  
+  settings = <<SETTINGS
+ {
+  "commandToExecute": "hostname && uptime && touch /pknw1"
+ }
+SETTINGS
+
+    lifecycle {
+        #ignore_changes = all
+        ignore_changes = [ tags, ]
+    }
+}
 
 output "public_ip_address" {
   value = azurerm_linux_virtual_machine.ubuntu_vm.public_ip_address
