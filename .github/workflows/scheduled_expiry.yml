@@ -1,7 +1,6 @@
-name: Periodic Expired Resources Scanning
+name: Periodic Expired Resources Un-Deploy
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '00,30 * * * *'
 
@@ -10,14 +9,14 @@ env:
  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
- TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
- TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
- TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
- TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+# TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+# TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+# TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+# TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
 
 jobs:
-  ubuntu:
+  undeploy:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
     name:  expired
     steps:
@@ -27,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16        
+          node-version: 18        
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -39,12 +38,12 @@ jobs:
       - name: Terraform expired
         id: expired
         run: |
-          # Get current timestamp
           ./expired.sh 2>&1 >> ./expired.log
           cd os/$(cat ./expired.log)
           terraform init
           terraform destroy -auto-approve
         continue-on-error: false
+
       - uses: actions/upload-artifact@v3
         with:
           name: expired

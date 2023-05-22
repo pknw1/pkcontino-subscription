@@ -1,24 +1,24 @@
-name: Deploy Environment
+name: Environment Actions
 
 on:
   workflow_dispatch:
     inputs:
-      OS:
-        description:
-        type: choice
-        options:
-          - ubuntu2204
-          - ubuntu_python
-          - win11
       action:
-        description:
+        description: Choose Action 
         type: choice
         options:
           - plan
           - apply
           - destroy
+      OS:
+        description: Choose Environment
+        type: choice
+        options:
+          - ubuntu2204
+          - ubuntu_python
+          - win11
       expiry:
-        description: auto-destroy in days?
+        description: Auto-expire new resources in days
         type: choice
         options:
           - 1
@@ -32,25 +32,25 @@ env:
  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
- TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
- TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
- TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
- TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+# TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+# TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+# TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+# TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
 
 jobs:
-  check:
-    runs-on: ubuntu-latest  # windows-latest | macos-latest
+  plan:
+    runs-on: ubuntu-latest 
     if: github.event.inputs.action == 'plan' 
-    name:  check
+    name:  plan
     steps:
       - name: checkout
         id: checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16        
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 16        
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -78,9 +78,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16        
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 16        
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -107,9 +107,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16        
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 16        
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
