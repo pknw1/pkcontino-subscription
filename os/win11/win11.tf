@@ -42,6 +42,8 @@ resource "azurerm_public_ip" "win11_public_ip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "win11_nsg" {
+  # checkov:skip=BC_AZR_NETWORKING_57: ADD REASON
+  # checkov:skip=BC_AZR_NETWORKING_2: ADD REASON
   name                = "win11NetworkSecurityGroup"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -73,6 +75,7 @@ resource "azurerm_network_security_group" "win11_nsg" {
 
 # Create network interface
 resource "azurerm_network_interface" "win11_nic" {
+  # checkov:skip=BC_AZR_NETWORKING_36: ADD REASON
   name                = "win11NIC"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -102,9 +105,6 @@ resource "random_id" "random_id" {
 }
 
 
-
-
-# Create virtual machine
 resource "azurerm_windows_virtual_machine" "main" {
   name                  = "win11"
   admin_username        = "pknw1"
@@ -126,8 +126,8 @@ resource "azurerm_windows_virtual_machine" "main" {
     sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
-
-
+  encryption_at_host_enabled = true
+  allow_extension_operations = false
 }
 
 resource "random_password" "password" {

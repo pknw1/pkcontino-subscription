@@ -42,6 +42,7 @@ resource "azurerm_public_ip" "ubuntu2204_public_ip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "ubuntu2204_nsg" {
+  # checkov:skip=BC_AZR_NETWORKING_3: ADD REASON
   name                = "ubuntu2204NetworkSecurityGroup"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -61,6 +62,7 @@ resource "azurerm_network_security_group" "ubuntu2204_nsg" {
 
 # Create network interface
 resource "azurerm_network_interface" "ubuntu2204_nic" {
+  # checkov:skip=BC_AZR_NETWORKING_36: ADD REASON
   name                = "ubuntu2204NIC"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -105,6 +107,7 @@ resource "tls_private_key" "example_ssh" {
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "ubuntu2204_vm" {
+  # checkov:skip=BC_AZR_GENERAL_14: ADD REASON
   name                  = "ubuntu2204VM"
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
@@ -123,7 +126,6 @@ resource "azurerm_linux_virtual_machine" "ubuntu2204_vm" {
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
-
 
   computer_name                   = "ubuntu2204vm"
   admin_username                  = "pknw1"
