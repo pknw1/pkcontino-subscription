@@ -40,7 +40,7 @@ resource "azurerm_public_ip" "ubuntu2204_public_ip" {
   allocation_method   = "Dynamic"
 
     timeouts {
-      delete = "10s"
+      delete = "2h"
   }
 }
 
@@ -79,7 +79,7 @@ resource "azurerm_network_interface" "ubuntu2204_nic" {
   }
 
     timeouts {
-      delete = "10s"
+      delete = "2h"
   }
 }
 
