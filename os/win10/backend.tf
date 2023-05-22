@@ -8,12 +8,16 @@ terraform {
             key                  = "dev.tfstate"
           }
         }
-
 provider "azurerm" {
  features {
     virtual_machine {
-    skip_shutdown_and_force_delete = true
+      delete_os_disk_on_deletion = true
+      graceful_shutdown = true
+      skip_shutdown_and_force_delete = true
   }
+  resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
  }
  skip_provider_registration = false
  storage_use_azuread = true
