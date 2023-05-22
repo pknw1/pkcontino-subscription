@@ -3,7 +3,7 @@ name: Periodic Expired Resources Un-Deploy
 on:
   workflow_dispatch:
   schedule:
-    - cron: '00,30 * * * *'
+    - cron: '*/15 19,20,21 * * *'
 
 env:
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}

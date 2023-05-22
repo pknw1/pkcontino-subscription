@@ -23,6 +23,7 @@ on:
         description: Auto-expire new resources in days
         type: choice
         options:
+          - 0
           - 1
           - 2
           - 3
