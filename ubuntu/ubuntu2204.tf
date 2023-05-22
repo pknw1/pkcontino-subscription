@@ -134,7 +134,7 @@ resource "azurerm_virtual_machine_extension" "configureLinuxRunner" {
   type                 = "CustomScript"
   type_handler_version = "2.1"
 
-  depends_on = [ azurerm_storage_blob.configureLinuxRunner, azurerm_role_assignment.linux_runner_storage,azurerm_storage_account.storage, azurerm_storage_account.support ]
+  depends_on = [ azurerm_linux_virtual_machine.ubuntu_vm ]
   
   settings = <<SETTINGS
  {
