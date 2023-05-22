@@ -45,7 +45,9 @@ jobs:
         id: expired
         run: |
           # Get current timestamp
-          timestamp=$(date -u +%d/%m/%Y)
-          ./expired.sh
+          ./expired.sh > ./expired.log
         continue-on-error: false
-        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: expired
+          path: expired.log
