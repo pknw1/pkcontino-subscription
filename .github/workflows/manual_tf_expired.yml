@@ -48,8 +48,8 @@ jobs:
       - name: Terraform expired
         id: expired
         run: |
-          os=$(az group list --tag 'expired' --query '[].id' -o tsv | awk -F/ '{print $NF}')
-          cd os/${os}/
+          cd os
+          az group list --tag 'expired' --query '[].id' -o tsv | awk -F/ '{print $NF}' | xargs -n1 cd 
           terraform init
         continue-on-error: false
         
