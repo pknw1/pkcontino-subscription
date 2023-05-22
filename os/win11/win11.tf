@@ -138,6 +138,9 @@ resource "azurerm_windows_virtual_machine" "main" {
   }
   encryption_at_host_enabled = false
   allow_extension_operations = true
+
+    depends_on = [ azurerm_network_interface_security_group_association.example ]
+
 }
 
 resource "random_password" "password" {

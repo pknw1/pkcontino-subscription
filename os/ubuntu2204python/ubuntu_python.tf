@@ -148,6 +148,8 @@ resource "azurerm_linux_virtual_machine" "ubuntu2204python_vm" {
   #boot_diagnostics {
   #  storage_account_uri = azurerm_storage_account.ubuntu2204python_storage_account.primary_blob_endpoint
   #}
+    depends_on = [ azurerm_network_interface_security_group_association.example ]
+
 }
 
 
