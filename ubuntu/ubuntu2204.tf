@@ -106,10 +106,11 @@ resource "azurerm_linux_virtual_machine" "ubuntu_vm" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jamubuntu"
+    offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
+
 
   computer_name                   = "ubuntuvm"
   admin_username                  = "pknw1"
