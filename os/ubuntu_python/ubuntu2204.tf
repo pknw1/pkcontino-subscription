@@ -29,7 +29,7 @@ resource "azurerm_public_ip" "ubuntu2204python_public_ip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "ubuntu2204python_nsg" {
-  name                = "ubuntu2204pythonNetworkSecurityGroup"
+  name                = "pythonNetworkSecurityGroup"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -106,7 +106,7 @@ resource "azurerm_linux_virtual_machine" "ubuntu2204python_vm" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu2204python-server-jammy"
+    offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
