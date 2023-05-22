@@ -54,7 +54,7 @@ jobs:
         id: Plan
         run: |
           cd os/${{ github.event.inputs.OS }}
-          terraform plan -no-color -input=false -var expiry=${{ github.event.inputs.expiry }}
+          terraform plan -no-color -input=false 
         continue-on-error: false
 
 
