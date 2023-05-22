@@ -38,6 +38,10 @@ resource "azurerm_public_ip" "ubuntu2204python_public_ip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
+
+  timeouts {
+      delete = "10s"
+  }
 }
 
 # Create Network Security Group and rule
