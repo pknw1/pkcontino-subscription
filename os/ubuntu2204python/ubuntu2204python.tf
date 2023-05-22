@@ -44,6 +44,8 @@ resource "azurerm_public_ip" "ubuntu2204python_public_ip" {
   }
 }
 
+
+
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "ubuntu2204python_nsg" {
   # checkov:skip=BC_AZR_NETWORKING_3: ADD REASON
@@ -62,6 +64,8 @@ resource "azurerm_network_security_group" "ubuntu2204python_nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  depends_on = [ azurerm_network_interface.ubuntu2204python_nic ]
 }
 
 # Create network interface
@@ -78,6 +82,7 @@ resource "azurerm_network_interface" "ubuntu2204python_nic" {
     public_ip_address_id          = azurerm_public_ip.ubuntu2204python_public_ip.id
   }
 
+  depends_on = [ azurerm_public_ip.ubuntu2204python_public_ip ]
     timeouts {
       delete = "10s"
   }
@@ -87,6 +92,10 @@ resource "azurerm_network_interface" "ubuntu2204python_nic" {
 resource "azurerm_network_interface_security_group_association" "example" {
   network_interface_id      = azurerm_network_interface.ubuntu2204python_nic.id
   network_security_group_id = azurerm_network_security_group.ubuntu2204python_nsg.id
+
+    depends_on = [ azurerm_network_interface.ubuntu2204python_nic,
+                  azurerm_network_security_group.ubuntu2204python_nsg ]
+
 }
 
 # Generate random text for a unique storage account name
