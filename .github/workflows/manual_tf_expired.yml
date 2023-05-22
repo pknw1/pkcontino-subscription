@@ -43,9 +43,10 @@ jobs:
       - name: Terraform expired
         id: expired
         run: |
-          cd os
-          cd $(az group list --tag 'expired' --query '[].id' -o tsv | awk -F/ '{print $NF}') || exit 99
-          terraform init
-          terraform destroy -auto-approve 
+          # Get current timestamp
+          timestamp=$(date -u +%Y-%m-%d)
+
+        # Run Azure CLI command to list resource groups with specific tag value
+          az group list --query "[?tags.expires<=\`${timestamp}\`]"
         continue-on-error: false
         
