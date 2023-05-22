@@ -2,13 +2,7 @@ name: Terraform expired
 
 on:
   workflow_dispatch:
-    inputs:
-      OS:
-        description:
-        type: choice
-        options:
-          - ubuntu2204
-          - ubuntu_python
+
 
 env:
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
