@@ -126,8 +126,8 @@ resource "azurerm_windows_virtual_machine" "main" {
     sku       = "win11-22h2-pron"
     version   = "latest"
   }
-  encryption_at_host_enabled = true
-  allow_extension_operations = false
+  encryption_at_host_enabled = false
+  allow_extension_operations = true
 }
 
 resource "random_password" "password" {

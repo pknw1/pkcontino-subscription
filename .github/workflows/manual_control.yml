@@ -16,7 +16,7 @@ on:
         type: choice
         options:
           - ubuntu2204
-          - ubuntu_python
+          - ubuntu2204python
           - win11
       expiry:
         description: Auto-expire new resources in days
