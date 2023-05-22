@@ -9,6 +9,7 @@ on:
         options:
           - ubuntu2204
           - ubuntu_python
+          - win11
       expiry:
         description: auto-destroy in days?
         type: choice

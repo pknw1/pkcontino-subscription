@@ -9,6 +9,7 @@ on:
         options:
           - ubuntu2204
           - ubuntu_python
+          - win11
 
 
 env:
