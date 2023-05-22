@@ -40,7 +40,7 @@ resource "azurerm_public_ip" "win11_public_ip" {
   allocation_method   = "Dynamic"
 
     timeouts {
-      delete = "10s"
+      delete = "2h"
   }
 }
 
@@ -92,7 +92,7 @@ resource "azurerm_network_interface" "win11_nic" {
   }
 
     timeouts {
-      delete = "10s"
+      delete = "2h"
   }
   depends_on = [azurerm_public_ip.win11_public_ip]
 }
