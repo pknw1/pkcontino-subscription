@@ -46,6 +46,8 @@ jobs:
         run: |
           # Get current timestamp
           ./expired.sh 2>&1 >> ./expired.log
+          cd os/$(cat ./expired.log)
+          terraform init
         continue-on-error: false
       - uses: actions/upload-artifact@v3
         with:
