@@ -19,7 +19,6 @@ on:
           - 3
           - 4 
           - 5
-    
 
 env:
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -53,6 +52,22 @@ jobs:
         run: |
           cd os/${{ github.event.inputs.OS }}
           terraform init -no-color -input=false 
+        continue-on-error: false
+
+     
+      - name: Terraform plan
+        id: Plan
+        run: |
+          cd os/${{ github.event.inputs.OS }}
+          terraform plan -no-color -input=false -var expiry=${{ github.event.inputs.expiry }} -out=plan
+        continue-on-error: false
+
+             
+      - uses: actions/upload-artifact@v3
+        with:
+          name: plan
+          path: os/${{ github.event.inputs.OS }}/plan
+        continue-on-error: true
 
       - name: Terraform Apply
         id: Apply

@@ -2,7 +2,8 @@ name: Terraform expired
 
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '00,30 * * * *'
 
 env:
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
