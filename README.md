@@ -6,12 +6,15 @@
 | ✅ Ubuntu 22.04, Windows 11 Bare OS Selections | ⌛️ resource groups tagged with over-ridable expiry|
 | ✅ Python 3.10 on Ubuntu                       | ⌛️ hourly scans for expired rg|
 
+## Environment Deployment & Control
 
-## [Deploy | Destroy] Azure Environment
+- Choose Actions
+- Choose Environment Actions
+- Click "Run WorkFlow" button
+  - Branch              : Main
+  - Choose Action       : [plan|apply|destroy]
+  - Choose Environment  : [ubuntu2204|ubuntu2204python|win11]
+  - Auto-Expire (Days)  : [1|2|3|4|5]
 
-- manual workflow action to select an OS choice
-- user selected expiry in days (default 1 day)
-- terraform apply to deploy the selected OS
-  - resource group is tagged with tag `expires` and set to `X days` in the future 
-- scheduled recurring workflow runs and checks for expires tag
-  - if expires tag value is today, undeploy the OS
+  
+## Automated Expired Un-Deployment
