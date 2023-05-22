@@ -10,6 +10,13 @@ on:
           - ubuntu2204
           - ubuntu_python
           - win11
+      action:
+        description:
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
       expiry:
         description: auto-destroy in days?
         type: choice
@@ -32,8 +39,69 @@ env:
 
 
 jobs:
-  ubuntu:
+  check:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.inputs.action == 'plan' 
+    name:  check
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16        
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.inputs.OS }}/
+          terraform init -no-color -input=false 
+  
+      - name: Terraform plan
+        id: Plan
+        run: |
+          cd os/${{ github.event.inputs.OS }}
+          terraform plan -no-color -input=false 
+        continue-on-error: false
+
+
+  destroy:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.inputs.action == 'destroy' 
+    name:  destroy
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16        
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.inputs.OS }}/
+          terraform init -no-color -input=false 
+  
+      - name: Terraform destroy
+        id: destroy
+        run: |
+          cd os/${{ github.event.inputs.OS }}/
+          terraform destroy -auto-approve -no-color -input=false
+        continue-on-error: false
+        
+  apply:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.inputs.action == 'destroy' 
+
     name:  Apply
     steps:
       - name: checkout
