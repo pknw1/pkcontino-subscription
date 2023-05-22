@@ -151,7 +151,7 @@ resource "azurerm_virtual_machine_extension" "configureLinuxRunner" {
 
   settings = <<SETTINGS
  {
-  "commandToExecute": "hostname && uptime && touch /pknw1"
+  "commandToExecute": "apt update && apt upgrade -yq"
  }
 SETTINGS
 

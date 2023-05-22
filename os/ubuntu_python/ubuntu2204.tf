@@ -3,8 +3,8 @@ variable "expiry" { default = 1 }
 locals {
   current_time           = timestamp()
   today                  = formatdate("YYYY-MM-DD", local.current_time)
-    
-  max_start_date         = formatdate("YYYY-MM-DD", timeadd(local.today, "1d"))
+  hours                  = var.expiry * 24
+  max_start_date         = formatdate("DD/MM/YYYY", timeadd(timestamp(), "${local.hours}h"))
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -151,7 +151,7 @@ resource "azurerm_virtual_machine_extension" "configureLinuxRunner" {
 
   settings = <<SETTINGS
  {
-  "commandToExecute": "hostname && uptime && touch /pknw1"
+  "commandToExecute": "apt update && apt upgrade -yq && apt install -y python3-pip"
  }
 SETTINGS
 
