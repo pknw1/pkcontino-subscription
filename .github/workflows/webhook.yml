@@ -1,4 +1,4 @@
-name: webhook
+name: Webhook from Flows
 
 # Controls when the workflow will run
 on:
@@ -7,28 +7,99 @@ on:
 
 env: 
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-  TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-  TF_VAR_PAT: ${{ secrets.PAT }}
-  TF_VAR_REPO_GH_TOKEN: ${{ secrets.PAT }}
 
 
 jobs:
-
-  setup_infra:
-    runs-on: ubuntu-latest
+  plan:
+    runs-on: ubuntu-latest 
+    if: github.event.client_payload.action == 'plan' 
+    name:  plan
     steps:
-      - name: checkour
+      - name: checkout
+        id: checkout
         uses: actions/checkout@v3
-
-      - name: git
-        continue-on-error: true
+  
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
         run: |
-         git config --global user.name "John Doe"
-         git config --global user.email johndoe@example.com
-         echo ${{ github.event.client_payload.action }} 
+          cd os/${{ github.event.client_payload.environment  }}/
+          terraform init -no-color -input=false 
+  
+      - name: Terraform plan
+        id: Plan
+        run: |
+          cd os/${{ github.event.client_payload.environment }}
+          terraform plan -no-color -input=false 
+        continue-on-error: false
 
-   
+  destroy:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.client_payload.action  == 'destroy' 
+    name:  destroy
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3
+    
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.client_payload.environment }}/
+          terraform init -no-color -input=false 
+  
+      - name: Terraform destroy
+        id: destroy
+        run: |
+          cd os/${{ github.event.client_payload.environment }}/
+          terraform destroy -auto-approve -no-color -input=false
+        continue-on-error: false
+        
+  apply:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.client_payload.action == 'apply' 
+    name:  Apply
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3  
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.client_payload.environment }}
+          terraform init -no-color -input=false 
+        continue-on-error: false
+
+    
+      - name: Terraform plan
+        id: Plan
+        run: |
+          cd os/${{ github.event.client_payload.environment }}
+          terraform plan -no-color -input=false -var expiry=${{ github.event.client_payload.expires  }} -out=plan
+        continue-on-error: false
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: plan
+          path: os/${{ github.event.client_payload.environment }}/plan
+        continue-on-error: true
+
+      - name: Terraform Apply
+        id: Apply
+        run: |
+          cd os/${{ github.event.client_payload.environment }}
+          terraform apply -auto-approve -no-color -input=false -var expiry=${{ github.event.client_payload.expires }}
+        continue-on-error: false
+        
