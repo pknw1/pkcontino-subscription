@@ -1,6 +1,6 @@
 # pkcontino-subscription
 
-| Deployments | Automation |
+| Deployments | Automation |.  
 | ----------- | ---------- |
 | ✅ Single Click Environment Deployment         | ⌛️ automated, timed un-deployment|
 | ✅ Ubuntu 22.04, Windows 11 Bare OS Selections | ⌛️ resource groups tagged with over-ridable expiry|
