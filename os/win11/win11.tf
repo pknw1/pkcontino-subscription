@@ -130,7 +130,7 @@ resource "azurerm_windows_virtual_machine" "main" {
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.win11_nic.id]
-  size                  = "Standard_DS1_v2"
+  size                  = "Standard_B2ms"
 
   os_disk {
     name                 = "myOsDisk"
