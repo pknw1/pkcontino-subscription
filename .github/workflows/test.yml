@@ -3,7 +3,8 @@ name: Test
 on:
   push:
     branches: 
-      - 'pr_*'
+      - 'pr_*'  
+      - ' main'
   workflow_dispatch:
     inputs:
       action:
@@ -67,78 +68,31 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          cd os/${{ github.event.inputs.OS }}/
-          terraform init -no-color -input=false 
-  
-      - name: Terraform plan
-        id: Plan
-        run: |
-          cd os/${{ github.event.inputs.OS }}
-          terraform plan -no-color -input=false 
-        continue-on-error: false
-
-  destroy:
-    runs-on: ubuntu-latest  # windows-latest | macos-latest
-    if: github.event.inputs.action == 'destroy' 
-    name:  destroy
-    steps:
-      - name: checkout
-        id: checkout
-        uses: actions/checkout@v3
-    
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-          
-      - name: Terraform Init
-        id: init
-        run: |
-          cd os/${{ github.event.inputs.OS }}/
-          terraform init -no-color -input=false 
-  
-      - name: Terraform destroy
-        id: destroy
-        run: |
-          cd os/${{ github.event.inputs.OS }}/
-          terraform destroy -auto-approve -no-color -input=false
-        continue-on-error: false
+          echo 'plan' >> $GITHUB_STEP_SUMMARY
+          ls -l > file.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: file
+          path: file.txt
         
   apply:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
     if: github.event.inputs.action == 'apply' 
     name:  Apply
+    needs: plan
     steps:
       - name: checkout
         id: checkout
         uses: actions/checkout@v3  
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-          
-      - name: Terraform Init
-        id: init
-        run: |
-          cd os/${{ github.event.inputs.OS }}
-          terraform init -no-color -input=false 
-        continue-on-error: false
-
-     
-      - name: Terraform plan
-        id: Plan
-        run: |
-          cd os/${{ github.event.inputs.OS }}
-          terraform plan -no-color -input=false -var expiry=${{ github.event.inputs.expiry }} -out=plan
-        continue-on-error: false
-
-      - uses: actions/upload-artifact@v3
+        
+      - uses: actions/download-artifact@v2
         with:
-          name: plan
-          path: os/${{ github.event.inputs.OS }}/plan
-        continue-on-error: true
-
+          name: file
+          path: test.txt
+          
       - name: Terraform Apply
         id: Apply
         run: |
-          cd os/${{ github.event.inputs.OS }}
-          terraform apply -auto-approve -no-color -input=false -var expiry=${{ github.event.inputs.expiry }}
-        continue-on-error: false
+          cat test.txt >> $GITHUB_STEP_SUMMARY
+
         
