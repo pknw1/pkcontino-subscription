@@ -1,6 +1,16 @@
 name: Test
 
 on:
+  pull_request:
+    types:
+      - opened
+    branches:    
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!main'   # excludes master
+    paths:
+      - 'production/**'
   workflow_dispatch:
     inputs:
       action:
@@ -40,7 +50,6 @@ env:
 jobs:
   common:
     runs-on: ubuntu-latest 
-    if: github.event.inputs.action == 'plan' 
     name:  common
     steps:
       - name: show
