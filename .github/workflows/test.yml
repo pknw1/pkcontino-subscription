@@ -2,15 +2,6 @@ name: Test
 
 on:
   pull_request:
-    types:
-      - opened
-    branches:    
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
-      - '!main'   # excludes master
-    paths:
-      - 'production/**'
   push:
   workflow_dispatch:
     inputs:
