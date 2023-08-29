@@ -52,7 +52,9 @@ jobs:
 
   plan:
     runs-on: ubuntu-latest 
-    if: github.event.inputs.action == 'skip' 
+    if: contains('
+        twst
+      ', github.ref_name)
     name:  plan
     needs: common
     steps:
