@@ -77,7 +77,7 @@ jobs:
         
   apply:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    if: github.event.inputs.action == 'apply' 
+    if: github.ref_name == 'main' 
     name:  Apply
     needs: plan
     steps:
