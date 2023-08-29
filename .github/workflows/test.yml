@@ -1,0 +1,141 @@
+name: Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+  # checkov:skip=BC_REPO_GITHUB_ACTION_7: ADD REASON
+        description: Choose Action 
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+      OS:
+        description: Choose Environment
+        type: choice
+        options:
+          - ubuntu2204
+          - ubuntu2204python
+          - win10
+          - win11
+      expiry:
+        description: Auto-expire new resources in days
+        type: choice
+        options:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4 
+          - 5
+
+env:
+ ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+ ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+ ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+ ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+
+jobs:
+  common:
+    runs-on: ubuntu-latest 
+    if: github.event.inputs.action == 'plan' 
+    name:  common
+    steps:
+      - name: show
+        id: show
+        run: |
+          echo '${{ github.event_name }}' >> $GITHUB_STEP_SUMMARY
+   
+  plan:
+    runs-on: ubuntu-latest 
+    if: github.event.inputs.action == 'skip' 
+    name:  plan
+    needs: common
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3
+   
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.inputs.OS }}/
+          terraform init -no-color -input=false 
+  
+      - name: Terraform plan
+        id: Plan
+        run: |
+          cd os/${{ github.event.inputs.OS }}
+          terraform plan -no-color -input=false 
+        continue-on-error: false
+
+  destroy:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.inputs.action == 'destroy' 
+    name:  destroy
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3
+    
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.inputs.OS }}/
+          terraform init -no-color -input=false 
+  
+      - name: Terraform destroy
+        id: destroy
+        run: |
+          cd os/${{ github.event.inputs.OS }}/
+          terraform destroy -auto-approve -no-color -input=false
+        continue-on-error: false
+        
+  apply:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    if: github.event.inputs.action == 'apply' 
+    name:  Apply
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v3  
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+          
+      - name: Terraform Init
+        id: init
+        run: |
+          cd os/${{ github.event.inputs.OS }}
+          terraform init -no-color -input=false 
+        continue-on-error: false
+
+     
+      - name: Terraform plan
+        id: Plan
+        run: |
+          cd os/${{ github.event.inputs.OS }}
+          terraform plan -no-color -input=false -var expiry=${{ github.event.inputs.expiry }} -out=plan
+        continue-on-error: false
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: plan
+          path: os/${{ github.event.inputs.OS }}/plan
+        continue-on-error: true
+
+      - name: Terraform Apply
+        id: Apply
+        run: |
+          cd os/${{ github.event.inputs.OS }}
+          terraform apply -auto-approve -no-color -input=false -var expiry=${{ github.event.inputs.expiry }}
+        continue-on-error: false
+        
