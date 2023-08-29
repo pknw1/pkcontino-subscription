@@ -57,7 +57,8 @@ jobs:
         id: show
         run: |
           echo '${{ github.event_name }}' >> $GITHUB_STEP_SUMMARY
-   
+          echo '${{ github.ref_name }}' >> $GITHUB_STEP_SUMMARY
+
   plan:
     runs-on: ubuntu-latest 
     if: github.event.inputs.action == 'skip' 
