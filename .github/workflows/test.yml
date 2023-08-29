@@ -4,8 +4,7 @@ on:
   pull_request:
   push:
     branches: 
-      - 'main'
-      - 'twst*'
+      - 'pr_*'
   workflow_dispatch:
     inputs:
       action:
