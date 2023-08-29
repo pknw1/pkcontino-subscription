@@ -12,13 +12,6 @@ on:
     paths:
       - 'production/**'
   push:
-    branches:    
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
-      - 'main'   # excludes master
-    paths:
-      - 'production/**'
   workflow_dispatch:
     inputs:
       action:
